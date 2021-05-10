@@ -8,7 +8,7 @@
     stages {
       stage('fetch_latest_code') {
         steps {
-          git url: 'https://github.com/orenzamir5/terraform-test.git'
+          git credentialsId: 'github', url: 'https://github.com/orenzamir5/terraform-test.git'
         }
       }
 
