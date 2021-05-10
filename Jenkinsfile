@@ -6,14 +6,22 @@
     }
 
     stages {
+
+//      stage('fetch_latest_code') {
+//        steps {
+//          git credentialsId: 'github', url: 'https://github.com/orenzamir5/terraform-test.git'
+//        }
+//      }
+
       stage('fetch_latest_code') {
         steps {
-          git credentialsId: 'github', url: 'https://github.com/orenzamir5/terraform-test.git'
+          sh 'git clone https://github.com/orenzamir5/terraform-test.git'
         }
       }
 
       stage('TF Init&Plan') {
         steps {
+          sh 'cd terraform-test' 
           sh 'terraform init'
           sh 'terraform plan'
         }      
