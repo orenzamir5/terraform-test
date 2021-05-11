@@ -1,42 +1,46 @@
-  pipeline {
-    agent {
-      node {
-        label "master"
-      } 
-    }
+pipeline {
+  agent {
+    node {
+      label "master"
+    } 
+  }
+  
+  stages {
 
-    stages {
-
-//      stage('fetch_latest_code') {
-//        steps {
-//          git credentialsId: 'github', url: 'https://github.com/orenzamir5/terraform-test.git'
-//        }
-//      }
-
-      stage('fetch_latest_code') {
-        steps {
-          sh 'cd terraform-test && git checkout . && git pull'
+    stage('TF Git Pull') {
+      steps {
+        script {
+          sh 'git checkout . && git pull'
         }
       }
+    }
 
-      stage('TF Init&Plan') {
-        steps {
-          sh "cd terraform-test/${TERRAFORM_PROJECT} && terraform init && terraform plan"
-        }      
+    stage('TF Init & Plan') {
+      steps {
+        script {
+          sh "cd ${TERRAFORM_PROJECT} && terraform init && terraform plan"
+        }
+      }      
+    }
+
+    stage('TF Approval') {
+      steps {
+        script {
+          env.userInput = input(id: 'confirm', message: "${TERRAFORM_MODE} Terraform?", parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: "${TERRAFORM_MODE} terraform", name: 'confirm'] ])
+        }
       }
+    }
 
-      stage('Approval') {
-        steps {
-          script {
-            def userInput = input(id: 'confirm', message: 'Apply Terraform?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Apply terraform', name: 'confirm'] ])
+    stage('TF Apply / Destroy') {
+      steps {
+        script {
+          if (userInput) {
+            sh "cd terraform-test/${TERRAFORM_PROJECT} && terraform ${TERRAFORM_MODE} -auto-approve"
+          } else {
+            error("Terraform not ${TERRAFORM_MODE}! Approve required!")
           }
         }
       }
-
-      stage('TF Apply') {
-        steps {
-          sh "cd terraform-test/${TERRAFORM_PROJECT} && terraform apply -input=false"
-        }
-      }
-    } 
+    }
   }
+}
