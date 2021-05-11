@@ -15,13 +15,13 @@
 
       stage('fetch_latest_code') {
         steps {
-          sh 'git clone https://github.com/orenzamir5/terraform-test.git'
+          sh 'cd terraform-test && git checkout . && git pull'
         }
       }
 
       stage('TF Init&Plan') {
         steps {
-          sh 'cd terraform-test' 
+          sh "cd terraform-test/${TERRAFORM_PROJECT}" 
           sh 'terraform init'
           sh 'terraform plan'
         }      
@@ -37,6 +37,7 @@
 
       stage('TF Apply') {
         steps {
+          sh "cd terraform-test/${TERRAFORM_PROJECT}"
           sh 'terraform apply -input=false'
         }
       }
