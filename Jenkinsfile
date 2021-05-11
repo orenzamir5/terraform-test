@@ -21,9 +21,7 @@
 
       stage('TF Init&Plan') {
         steps {
-          sh "cd terraform-test/${TERRAFORM_PROJECT}" 
-          sh 'terraform init'
-          sh 'terraform plan'
+          sh "cd terraform-test/${TERRAFORM_PROJECT} && terraform init && terraform plan"
         }      
       }
 
@@ -37,8 +35,7 @@
 
       stage('TF Apply') {
         steps {
-          sh "cd terraform-test/${TERRAFORM_PROJECT}"
-          sh 'terraform apply -input=false'
+          sh "cd terraform-test/${TERRAFORM_PROJECT} && terraform apply -input=false"
         }
       }
     } 
