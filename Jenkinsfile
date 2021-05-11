@@ -35,7 +35,7 @@ pipeline {
     stage('TF Apply / Destroy') {
       steps {
         script {
-          if (userInput) {
+          if (userInput == true) {
             sh "cd ${terraform_git_dir}/${TERRAFORM_PROJECT} && terraform ${TERRAFORM_MODE} -auto-approve"
           } else {
             error("Terraform not ${TERRAFORM_MODE}! Approve required!")
