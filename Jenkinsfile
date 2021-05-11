@@ -10,6 +10,7 @@ pipeline {
     stage('TF Git Pull') {
       steps {
         script {
+          sh 'pwd'
           sh 'git checkout . && git pull'
         }
       }
