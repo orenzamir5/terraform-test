@@ -1,5 +1,3 @@
-env.terraform_git_dir = 'terraform-test'
-
 pipeline {
   agent {
     node {
@@ -12,7 +10,7 @@ pipeline {
     stage('TF Git Pull') {
       steps {
         script {
-          sh "cd ${terraform_git_dir} && git checkout . && git pull"
+          sh "git checkout main && git pull"
         }
       }
     }
@@ -20,7 +18,7 @@ pipeline {
     stage('TF Init & Plan') {
       steps {
         script {
-          sh "cd ${terraform_git_dir}/${TERRAFORM_INFRA}/${TERRAFORM_PROJECT} && terraform init && terraform plan"
+          sh "cd ${TERRAFORM_INFRA}/${TERRAFORM_PROJECT} && terraform init && terraform plan"
         }
       }      
     }
@@ -38,7 +36,7 @@ pipeline {
         script {
           println(userInput)
           if (userInput == "true") {
-            sh "cd ${terraform_git_dir}/${TERRAFORM_INFRA}/${TERRAFORM_PROJECT} && terraform ${TERRAFORM_MODE} -auto-approve"
+            sh "cd ${TERRAFORM_INFRA}/${TERRAFORM_PROJECT} && terraform ${TERRAFORM_MODE} -auto-approve"
           } else {
             error("Terraform not ${TERRAFORM_MODE}! Approve required!")
           }
