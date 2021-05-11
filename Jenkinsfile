@@ -1,4 +1,5 @@
 env.terraform_git_dir = 'terraform-test'
+
 pipeline {
   agent {
     node {
@@ -35,7 +36,8 @@ pipeline {
     stage('TF Apply / Destroy') {
       steps {
         script {
-          if (userInput == true) {
+          println(userInput)
+          if (userInput == "true") {
             sh "cd ${terraform_git_dir}/${TERRAFORM_PROJECT} && terraform ${TERRAFORM_MODE} -auto-approve"
           } else {
             error("Terraform not ${TERRAFORM_MODE}! Approve required!")
