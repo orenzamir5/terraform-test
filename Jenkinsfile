@@ -35,7 +35,7 @@ pipeline {
       steps {
         script {
           if (userInput) {
-            sh "cd terraform-test/${TERRAFORM_PROJECT} && terraform ${TERRAFORM_MODE} -auto-approve"
+            sh "cd ${TERRAFORM_PROJECT} && terraform ${TERRAFORM_MODE} -auto-approve"
           } else {
             error("Terraform not ${TERRAFORM_MODE}! Approve required!")
           }
