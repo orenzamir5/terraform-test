@@ -20,7 +20,7 @@ pipeline {
     stage('TF Init & Plan') {
       steps {
         script {
-          sh "cd ${terraform_git_dir}/${TERRAFORM_PROJECT} && terraform init && terraform plan"
+          sh "cd ${terraform_git_dir}/${TERRAFORM_INFRA}/${TERRAFORM_PROJECT} && terraform init && terraform plan"
         }
       }      
     }
@@ -38,7 +38,7 @@ pipeline {
         script {
           println(userInput)
           if (userInput == "true") {
-            sh "cd ${terraform_git_dir}/${TERRAFORM_PROJECT} && terraform ${TERRAFORM_MODE} -auto-approve"
+            sh "cd ${terraform_git_dir}/${TERRAFORM_INFRA}/${TERRAFORM_PROJECT} && terraform ${TERRAFORM_MODE} -auto-approve"
           } else {
             error("Terraform not ${TERRAFORM_MODE}! Approve required!")
           }
